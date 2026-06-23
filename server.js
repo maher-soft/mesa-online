@@ -28,13 +28,10 @@ app.get("/", (req, res) => {
 });
 
 // ROUTES
-const routes = require("./routes/index");
-app.use(routes);
+app.use(require("./routes"));
 
 // SOCKETS
 io.on("connection", (socket) => {
-    console.log("Jugador conectado:", socket.id);
-
     socket.on("joinRoom", (roomId) => {
         socket.join(roomId);
     });
@@ -45,5 +42,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(3000, () => {
-    console.log("Servidor en http://localhost:3000");
+    console.log("http://localhost:3000");
 });
