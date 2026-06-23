@@ -1,0 +1,13 @@
+node_modules/
+.env
+database/
+*.db
+*.sqlite
+*.sqlite3
+
+tests/
+*.http
+
+.DS_Store
+.vscode/
+npm-debug.log*
