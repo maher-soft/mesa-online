@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const session = require("express-session");
 const http = require("http");
@@ -13,7 +15,7 @@ require("./database/db");
 app.use(express.json());
 
 app.use(session({
-    secret: "mesa-online-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
