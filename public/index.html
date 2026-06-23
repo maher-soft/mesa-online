@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mesa Online</title>
+</head>
+<body>
+
+<h1>Mesa Online 🎲</h1>
+
+<div id="auth">
+    <h2>Login</h2>
+
+    <input id="username" placeholder="usuario">
+    <input id="password" type="password" placeholder="password">
+
+    <button onclick="login()">Entrar</button>
+
+    <p id="msg"></p>
+</div>
+
+<hr>
+
+<div id="userPanel" style="display:none;">
+    <h2>Usuario</h2>
+    <p id="userInfo"></p>
+
+    <button onclick="logout()">Logout</button>
+
+    <hr>
+
+    <h2>Conecta 4 🎮</h2>
+
+    <button onclick="createRoom()">Crear sala</button>
+
+    <br><br>
+
+    <input id="roomId" placeholder="ID sala">
+    <button onclick="joinRoom()">Unirse</button>
+
+    <hr>
+
+    <div id="roomInfo"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
