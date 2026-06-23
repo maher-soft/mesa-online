@@ -13,15 +13,9 @@ async function register() {
 
     const res = await fetch("/api/register", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({
-            username,
-            email,
-            password
-        })
+        body: JSON.stringify({ username, email, password })
     });
 
     const data = await res.json();
@@ -43,14 +37,9 @@ async function login() {
 
     const res = await fetch("/api/login", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({
-            username,
-            password
-        })
+        body: JSON.stringify({ username, password })
     });
 
     const data = await res.json();
@@ -73,15 +62,13 @@ async function loadUser() {
 
     const data = await res.json();
 
-    if (data.error) {
-        return;
-    }
+    if (data.error) return;
 
     document.getElementById("auth").style.display = "none";
     document.getElementById("userPanel").style.display = "block";
 
     document.getElementById("userInfo").innerText =
-        `${data.username} (${data.email})`;
+        `${data.username} (${data.email || ""})`;
 }
 
 //
@@ -109,9 +96,7 @@ async function createRoom() {
 
     const data = await res.json();
 
-    if (data.error) {
-        return alert(data.error);
-    }
+    if (data.error) return alert(data.error);
 
     currentRoom = data.room.id;
 
@@ -129,20 +114,14 @@ async function joinRoom() {
 
     const res = await fetch("/api/room/join", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({
-            roomId
-        })
+        body: JSON.stringify({ roomId })
     });
 
     const data = await res.json();
 
-    if (data.error) {
-        return alert(data.error);
-    }
+    if (data.error) return alert(data.error);
 
     currentRoom = roomId;
 
@@ -158,9 +137,7 @@ async function move(col) {
 
     const res = await fetch("/api/room/move", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
             roomId: currentRoom,
@@ -183,47 +160,55 @@ async function move(col) {
 }
 
 //
-// SOCKETS
+// SOCKET
 //
 socket.on("updateRoom", (room) => {
     renderRoom(room);
 });
 
 //
-// RENDER TABLERO
+// RENDER TABLERO (VISUAL)
 //
 function renderRoom(room) {
 
-    let html = `<h3>Sala: ${room.id}</h3>`;
-
-    html += `<p>Turno: ${room.turn}</p>`;
+    let html = `
+        <h3>Sala: ${room.id}</h3>
+        <p>Turno: ${room.turn}</p>
+    `;
 
     if (room.winner) {
         html += `<h2>🏆 Ganador: ${room.winner}</h2>`;
     }
 
-    html += "<div>";
+    html += `<div class="move-buttons">`;
 
     for (let c = 0; c < 7; c++) {
         html += `<button onclick="move(${c})">↓</button>`;
     }
 
-    html += "</div>";
+    html += `</div>`;
 
-    html += "<pre>";
+    html += `<div class="board">`;
 
     for (let r = 0; r < 6; r++) {
 
-        let row = "";
+        html += `<div class="board-row">`;
 
         for (let c = 0; c < 7; c++) {
-            row += room.board[r][c] || "⚪";
+
+            let cell = room.board[r][c];
+            let cls = "";
+
+            if (cell === "🔴") cls = "red";
+            if (cell === "🟡") cls = "yellow";
+
+            html += `<div class="cell ${cls}"></div>`;
         }
 
-        html += row + "\n";
+        html += `</div>`;
     }
 
-    html += "</pre>";
+    html += `</div>`;
 
     document.getElementById("roomInfo").innerHTML = html;
 }

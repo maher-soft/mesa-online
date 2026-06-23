@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const games = require("../games");
 const rooms = require("../data/rooms");
 
@@ -7,13 +8,16 @@ const rooms = require("../data/rooms");
 // CREATE ROOM
 //
 router.post("/api/room/create", (req, res) => {
+
     if (!req.session.user) {
         return res.status(401).json({
             error: "No autenticado"
         });
     }
 
-    const roomId = Math.random().toString(36).substring(2, 7);
+    const roomId = Math.random()
+        .toString(36)
+        .substring(2, 7);
 
     rooms[roomId] = {
         id: roomId,
@@ -38,6 +42,7 @@ router.post("/api/room/create", (req, res) => {
 // JOIN ROOM
 //
 router.post("/api/room/join", (req, res) => {
+
     if (!req.session.user) {
         return res.status(401).json({
             error: "No autenticado"
@@ -54,11 +59,26 @@ router.post("/api/room/join", (req, res) => {
         });
     }
 
+    //
+    // Sala completa
+    //
+    if (
+        room.players.length >= 2 &&
+        !room.players.find(
+            p => p.username === req.session.user.username
+        )
+    ) {
+        return res.status(400).json({
+            error: "Sala completa"
+        });
+    }
+
     const alreadyJoined = room.players.find(
         p => p.username === req.session.user.username
     );
 
-    if (!alreadyJoined && room.players.length < 2) {
+    if (!alreadyJoined) {
+
         room.players.push({
             username: req.session.user.username,
             color: "🟡"
@@ -74,6 +94,7 @@ router.post("/api/room/join", (req, res) => {
 // MOVE
 //
 router.post("/api/room/move", (req, res) => {
+
     if (!req.session.user) {
         return res.status(401).json({
             error: "No autenticado"
@@ -100,19 +121,24 @@ router.post("/api/room/move", (req, res) => {
         });
     }
 
-    const updatedRoom = games.connect4.makeMove(
+    const result = games.connect4.makeMove(
         room,
         player,
         col
     );
 
-    res.json(updatedRoom);
+    if (result.error) {
+        return res.status(400).json(result);
+    }
+
+    res.json(result);
 });
 
 //
 // GET ROOM
 //
 router.get("/api/room/:id", (req, res) => {
+
     const room = rooms[req.params.id];
 
     if (!room) {

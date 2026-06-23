@@ -1,0 +1,47 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #eee;
+}
+
+input, button {
+    padding: 8px;
+    margin: 5px;
+}
+
+.board {
+    display: inline-block;
+    background: #1565c0;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.board-row {
+    display: flex;
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    margin: 4px;
+    border-radius: 50%;
+    background: white;
+}
+
+.red {
+    background: red;
+}
+
+.yellow {
+    background: gold;
+}
+
+.move-buttons button {
+    width: 60px;
+    margin: 2px;
+    font-size: 18px;
+}
+
+h2 {
+    margin-top: 10px;
+}
