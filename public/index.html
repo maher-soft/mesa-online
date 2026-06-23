@@ -9,6 +9,17 @@
 <h1>Mesa Online 🎲</h1>
 
 <div id="auth">
+
+    <h2>Crear cuenta</h2>
+
+    <input id="registerUsername" placeholder="usuario">
+    <input id="registerEmail" placeholder="email">
+    <input id="registerPassword" type="password" placeholder="password">
+
+    <button onclick="register()">Crear cuenta</button>
+
+    <hr>
+
     <h2>Login</h2>
 
     <input id="username" placeholder="usuario">
@@ -17,12 +28,15 @@
     <button onclick="login()">Entrar</button>
 
     <p id="msg"></p>
+
 </div>
 
 <hr>
 
 <div id="userPanel" style="display:none;">
+
     <h2>Usuario</h2>
+
     <p id="userInfo"></p>
 
     <button onclick="logout()">Logout</button>
@@ -41,6 +55,7 @@
     <hr>
 
     <div id="roomInfo"></div>
+
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
